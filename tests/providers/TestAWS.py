@@ -4,11 +4,11 @@ from src.providers.AWS import AWS
 
 
 class TestAWS(TestCase):
-    @patch('src.providers.AWS.boto3.client')
+    @patch('src.providers.AWS.boto3.resource')
     def test_dynamodb(self, boto3_client_spy):
         AWS.dynamo_db()
 
-        boto3_client_spy.assert_called_once_with('dynamodb')
+        boto3_client_spy.assert_called_once()
 
     @patch('src.providers.AWS.boto3.client')
     def test_sqs(self, boto3_client_spy):
