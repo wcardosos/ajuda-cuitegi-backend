@@ -1,5 +1,5 @@
-from entities.Help import Help
-from providers.AWS import AWS
+from src.entities.Help import Help
+from src.providers.AWS import AWS
 import os
 
 #TABLE_NAME = os.getenv('HELP_TABLENAME')
