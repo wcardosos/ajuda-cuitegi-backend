@@ -8,12 +8,14 @@ import json
 
 def run(event, lambda_context=None):
     repository = DynamoDBHelpsRepository(AWS())
+
+    body = json.loads(event['body'])
     
     try:
-        person_to_help_name = event.get('body').get('person_to_help_name')
-        helper_name = event.get('body').get('helper_name')
-        description = event.get('body').get('description')
-        contact = event.get('body').get('contact')
+        person_to_help_name = body.get('person_to_help_name')
+        helper_name = body.get('helper_name')
+        description = body.get('description')
+        contact = body.get('contact')
 
         if not person_to_help_name or not helper_name or not description or not contact:
             raise InvalidRequestBodyError('Body inválido')

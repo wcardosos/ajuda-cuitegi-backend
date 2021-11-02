@@ -7,12 +7,12 @@ import json
 class TestCreateHelps(TestCase):
     def setUp(self) -> None:
         self.event_mock = {
-            'body': {
+            'body': json.dumps({
                 'person_to_help_name': 'Nome Pessoa Ajudada',
                 'helper_name': 'Nome Pessoa Ajudante',
                 'description': 'Descrição da ajuda',
                 'contact': 'contato'
-            }
+            })
         }
 
     @patch('src.handlers.create_help.AWS')
@@ -28,9 +28,12 @@ class TestCreateHelps(TestCase):
 
     @patch('src.handlers.create_help.AWS')
     def test_handler_returns_error_when_a_data_is_not_passed(self, aws_mock) -> None:
-        event = self.event_mock
-        del event['body']['description']
-
+        body = json.loads(self.event_mock['body'])
+        del body['description']
+        event = {
+            'body': json.dumps(body)
+        }
+        
         with patch('src.handlers.create_help.IdGenerator.generate') as id_generator_spy:
             with patch('src.handlers.create_help.DynamoDBHelpsRepository.save') as dynamo_repository_spy:
                 result = handler(event)
