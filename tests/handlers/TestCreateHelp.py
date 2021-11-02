@@ -1,6 +1,7 @@
 from unittest import TestCase, main
 from unittest.mock import Mock, patch
 from src.handlers.create_help import run as handler
+import json
 
 
 class TestCreateHelps(TestCase):
@@ -34,11 +35,9 @@ class TestCreateHelps(TestCase):
             with patch('src.handlers.create_help.DynamoDBHelpsRepository.save') as dynamo_repository_spy:
                 result = handler(event)
 
-                print(result['body'])
-
                 id_generator_spy.assert_not_called()
                 dynamo_repository_spy.assert_not_called()
-                self.assertEqual(result['body']['message'], 'Body inválido')
+                self.assertEqual(json.loads(result['body'])['message'], 'Body inválido')
                 self.assertEqual(result['statusCode'], 400)
     
 

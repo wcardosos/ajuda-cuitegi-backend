@@ -3,6 +3,7 @@ from src.errors.InvalidRequestBodyError import InvalidRequestBodyError
 from src.providers.AWS import AWS
 from src.providers.IdGenerator import IdGenerator
 from src.repositories.DynamoDBHelpsRepository import DynamoDBHelpsRepository
+import json
 
 
 def run(event, lambda_context=None):
@@ -33,12 +34,18 @@ def run(event, lambda_context=None):
         repository.save(new_help)
 
         return {
+            'headers': {
+                'Content-Type': 'application/json'
+            },
             'statusCode': 201
         }
     except Exception as error:
         return {
-            'body': {
+            'body': json.dumps({
                 'message': str(error)
+            }),
+            'headers': {
+                'Content-Type': 'application/json'
             },
             'statusCode': 400
         }
