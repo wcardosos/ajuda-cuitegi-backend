@@ -1,6 +1,33 @@
-import re
 import os
+import re
 import shutil
+
+def verify_custom_import(file_line: str) -> bool:
+    FROM_REGEX = r'^from\s'
+    IMPORT_REGEX = r'\simport\s'
+
+    return re.search(FROM_REGEX, file_line) and re.search(IMPORT_REGEX, file_line)
+
+def verify_folder_exists(folder: str) -> bool:
+    return os.path.exists(folder)
+
+
+def get_filename_from_import_string(import_string: str) -> str:
+    FILENAME_REGEX = r'\w+$'
+
+    filename = re.search(FILENAME_REGEX, import_string).group(0)
+
+    return filename
+
+def get_import_strings(filepath: str) -> list:
+    with open(filepath, 'r') as file:
+        lines = file.readlines()
+
+        import_strings_lines = list(filter(lambda line: verify_custom_import(line), lines))
+
+        import_strings = list(map(lambda line: line.replace('\n', ''), import_strings_lines))
+
+        return import_strings
 
 def get_path_file(import_string: str) -> str:
     PACKAGE_REGEX = r'src.\w+.\w+'
@@ -13,26 +40,7 @@ def get_path_file(import_string: str) -> str:
 
     return path_file
 
-def verify_custom_import(file_line: str) -> bool:
-    FROM_REGEX = r'^from\s'
-    IMPORT_REGEX = r'\simport\s'
-
-    return re.search(FROM_REGEX, file_line) and re.search(IMPORT_REGEX, file_line)
-
-def get_import_strings(filepath: str) -> list:
-    with open(filepath, 'r') as file:
-        lines = file.readlines()
-
-        import_strings_lines = list(filter(lambda line: verify_custom_import(line), lines))
-
-        import_strings = list(map(lambda line: line.replace('\n', ''), import_strings_lines))
-
-        return import_strings
-
-def verify_folder_exists(folder: str) -> bool:
-    return os.path.exists(folder)
-
-def get_root_folder() -> str:
+def get_project_root_folder() -> str:
     current_folder = os.getcwd()
 
     src_folder = current_folder.replace('/src/scripts', '')
@@ -46,13 +54,6 @@ def get_up_folder(folder: str) -> str:
 
     return up_folder
 
-def get_filename_from_import_string(import_string: str) -> str:
-    FILENAME_REGEX = r'\w+$'
-
-    filename = re.search(FILENAME_REGEX, import_string).group(0)
-
-    return filename
-
 def create_folder(folder: str) -> None:
     os.mkdir(folder)
 
@@ -64,7 +65,7 @@ def create_project_folders(handler_folder: str) -> None:
     os.mkdir(f'{handler_folder}/src/repositories')
 
 def create_files(handler: str) -> None:
-    root_folder = get_root_folder()
+    root_folder = get_project_root_folder()
     src_folder = f'{root_folder}/src'
 
     file_folder = f'{src_folder}/handlers/{handler}.py'
