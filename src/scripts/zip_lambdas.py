@@ -2,6 +2,7 @@ from src.providers.FileHandler import FileHandler
 import os
 import re
 import shutil
+import sys
 
 
 def verify_custom_import(file_line: str) -> bool:
@@ -114,3 +115,10 @@ def create_files(handler: str) -> None:
     create_handler_file(handler, file_folder, handler_folder)
 
     zip_lambda_folder(handler, handler_folder, lambdas_folder)
+
+def zip_lambdas():
+    handler = sys.argv[1]
+
+    create_files(handler)
+
+zip_lambdas()
