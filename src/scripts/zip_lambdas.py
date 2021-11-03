@@ -1,6 +1,8 @@
+from src.providers.FileHandler import FileHandler
 import os
 import re
 import shutil
+
 
 def verify_custom_import(file_line: str) -> bool:
     FROM_REGEX = r'^from\s'
@@ -64,6 +66,20 @@ def create_project_folders(handler_folder: str) -> None:
     os.mkdir(f'{handler_folder}/src/providers')
     os.mkdir(f'{handler_folder}/src/repositories')
 
+def zip_lambda_folder(handler_name: str, handler_folder: str, lambda_folder: str) -> None:
+    file_handler = FileHandler()
+    file_handler.zip_folder(handler_name, handler_folder, lambda_folder)
+
+def create_handler_file(handler: str, file_handler_name: str, lambda_handler_folder: str) -> None:
+    file_handler = FileHandler()
+
+    file_handler.copy(file_handler_name, lambda_handler_folder)
+
+    ORIGINAL_FILE = f'{lambda_handler_folder}/{handler}.py'
+    DESTINATION_FILE = f'{lambda_handler_folder}/handler.py'
+    os.rename(ORIGINAL_FILE, DESTINATION_FILE)
+
+
 def create_files(handler: str) -> None:
     root_folder = get_project_root_folder()
     src_folder = f'{root_folder}/src'
@@ -94,3 +110,7 @@ def create_files(handler: str) -> None:
         
         ORIGINAL_FILE = f'{root_folder}/{path_file}'
         shutil.copy(ORIGINAL_FILE, module_lambda_folder)
+    
+    create_handler_file(handler, file_folder, handler_folder)
+
+    zip_lambda_folder(handler, handler_folder, lambdas_folder)
