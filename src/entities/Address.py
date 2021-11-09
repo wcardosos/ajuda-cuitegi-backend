@@ -4,11 +4,11 @@ class Address:
         id: str,
         street: str,
         neighborhood: str,
-        number: int,
-        complement: str
+        complement: str,
+        number: str,
     ):
         self.id = id
         self.street = street
         self.neighborhood = neighborhood
-        self.number = number
         self.complement = complement
+        self.number = number

@@ -10,7 +10,7 @@ class TestCreateHelps(TestCase):
             'body': json.dumps({
                 'street': 'Rua',
                 'neighborhood': 'Bairro',
-                'house_number': 10,
+                'house_number': '10',
                 'complement': 'complemento',
                 'description': 'Descrição da ajuda',
                 'helper_name': 'Nome Pessoa Ajudante',
