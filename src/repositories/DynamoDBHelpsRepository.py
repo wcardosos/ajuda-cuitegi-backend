@@ -2,8 +2,7 @@ from src.entities.Help import Help
 from src.providers.AWS import AWS
 import os
 
-#TABLE_NAME = os.getenv('HELP_TABLENAME')
-TABLE_NAME = 'ajudacuitegi-dev-helps'
+TABLE_NAME = os.getenv('HELP_TABLENAME')
 
 class DynamoDBHelpsRepository:
     def __init__(self, aws: AWS) -> None:
