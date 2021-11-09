@@ -26,10 +26,19 @@ class DynamoDBHelpsRepository:
     def save(self, help: Help) -> None:
         item = {
             'id': help.id,
-            'person_to_help_name': help.person_to_help_name,
-            'helper_name': help.helper_name,
+            'address': {
+                'address_id': help.address.id,
+                'street': help.address.street,
+                'neighborhood': help.address.neighborhood,
+                'number': help.address.number,
+                'complement': help.address.complement
+            },
+            'helper': {
+                'name': help.helper.name,
+                'email': help.helper.email,
+                'telephone': help.helper.telephone
+            },
             'description': help.description,
-            'contact': help.contact,
             'image_url': help.image_url,
             'active': help.active,
         }

@@ -8,10 +8,14 @@ class TestCreateHelps(TestCase):
     def setUp(self) -> None:
         self.event_mock = {
             'body': json.dumps({
-                'person_to_help_name': 'Nome Pessoa Ajudada',
-                'helper_name': 'Nome Pessoa Ajudante',
+                'street': 'Rua',
+                'neighborhood': 'Bairro',
+                'house_number': 10,
+                'complement': 'complemento',
                 'description': 'Descrição da ajuda',
-                'contact': 'contato'
+                'helper_name': 'Nome Pessoa Ajudante',
+                'helper_email': 'helper@email.com',
+                'helper_telephone': 'telefone',
             })
         }
 
@@ -22,7 +26,7 @@ class TestCreateHelps(TestCase):
                 dynamo_repository_spy.save = Mock()
                 result = handler(self.event_mock)
 
-                id_generator_spy.assert_called_once()
+                id_generator_spy.assert_called()
                 dynamo_repository_spy.assert_called_once()
                 self.assertEqual(result['statusCode'], 201)
 

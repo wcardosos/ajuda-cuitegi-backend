@@ -1,3 +1,5 @@
+from src.entities.Address import Address
+from src.entities.Helper import Helper
 from src.entities.Help import Help
 from src.errors.InvalidRequestBodyError import InvalidRequestBodyError
 from src.providers.AWS import AWS
@@ -12,23 +14,49 @@ def run(event, lambda_context=None):
     body = json.loads(event['body'])
     
     try:
-        person_to_help_name = body.get('person_to_help_name')
         helper_name = body.get('helper_name')
+        helper_email = body.get('helper_email')
+        helper_telephone = body.get('helper_telephone')
+        street = body.get('street')
+        neighborhood = body.get('neighborhood')
+        house_number = body.get('house_number')
+        complement = body.get('complement')
         description = body.get('description')
-        contact = body.get('contact')
 
-        if not person_to_help_name or not helper_name or not description or not contact:
+        if (
+            not helper_name or
+            not helper_email or
+            not helper_telephone or
+            not street or
+            not neighborhood or
+            not house_number or
+            not description
+        ):
             raise InvalidRequestBodyError('Body inválido')
         
 
         help_id = IdGenerator.generate()
+        address_id = IdGenerator.generate()
+
+        address = Address(
+            address_id,
+            street,
+            neighborhood,
+            house_number,
+            complement
+        )
+
+        helper = Helper(
+            helper_name,
+            helper_email,
+            helper_telephone
+        )
 
         new_help = Help(
             help_id,
-            person_to_help_name,
-            helper_name,
+            address,
+            helper,
             description,
-            contact,
             '',
             False
         )
