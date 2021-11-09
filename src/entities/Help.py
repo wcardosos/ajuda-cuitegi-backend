@@ -9,7 +9,9 @@ class Help:
         helper: Helper,
         description: str,
         image_url: str,
-        active: bool
+        active: bool,
+        created_at: str,
+        updated_at: str = None
     ) -> None:
         self.id = id
         self.address = address
@@ -17,3 +19,5 @@ class Help:
         self.description = description
         self.image_url = image_url
         self.active = active
+        self.created_at = created_at
+        self.updated_at = updated_at

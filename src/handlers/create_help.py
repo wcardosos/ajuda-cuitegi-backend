@@ -5,6 +5,7 @@ from src.errors.InvalidRequestBodyError import InvalidRequestBodyError
 from src.providers.AWS import AWS
 from src.providers.IdGenerator import IdGenerator
 from src.repositories.DynamoDBHelpsRepository import DynamoDBHelpsRepository
+from datetime import datetime
 import json
 
 
@@ -38,6 +39,8 @@ def run(event, lambda_context=None):
         help_id = IdGenerator.generate()
         address_id = IdGenerator.generate()
 
+        help_created_at = str(datetime.now())
+
         address = Address(
             address_id,
             street,
@@ -58,7 +61,8 @@ def run(event, lambda_context=None):
             helper,
             description,
             '',
-            False
+            False,
+            help_created_at
         )
 
         repository.save(new_help)

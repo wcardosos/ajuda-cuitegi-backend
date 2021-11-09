@@ -41,6 +41,8 @@ class DynamoDBHelpsRepository:
             'description': help.description,
             'image_url': help.image_url,
             'active': help.active,
+            'created_at': help.created_at,
+            'updated_at': help.updated_at
         }
 
         self.table.put_item(Item=item)
